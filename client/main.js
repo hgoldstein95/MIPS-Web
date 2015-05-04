@@ -1,5 +1,5 @@
-var typeR = ['ADD', 'SUB', 'SRA', 'SRL', 'SLL', 'AND', 'OR', 'HALT']
-var typeI = ['NOP', 'LB', 'SB', 'ADDI', 'ANDI', 'ORI', 
+Template.main.typeR = ['ADD', 'SUB', 'SRA', 'SRL', 'SLL', 'AND', 'OR', 'HALT']
+Template.main.typeI = ['NOP', 'LB', 'SB', 'ADDI', 'ANDI', 'ORI', 
 			'BEQ', 'BNE', 'BGEZ', 'BLTZ']
 
 Session.setDefault('result', []);
@@ -44,7 +44,7 @@ Template.main.events({
 
 		for (var i = 0; i < commands.length; i++) {
 			cmd = commands[i];
-			if(_.indexOf(typeR, cmd[0]) != -1) {
+			if(_.indexOf(Template.main.typeR, cmd[0]) != -1) {
 				var op = '1111';
 				var rs = '000';
 				var rt = '000';
@@ -103,7 +103,7 @@ Template.main.events({
 				result.push(op.toString() + rs.toString() + rt.toString() +
 						rd.toString() + funct.toString() + " # " + cmd.join(' '));
 			}
-			else if (_.indexOf(typeI, cmd[0]) != -1)  {
+			else if (_.indexOf(Template.main.typeI, cmd[0]) != -1)  {
 				var op = '0000';
 				var rs = '000';
 				var rt = '000';
