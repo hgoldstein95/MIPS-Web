@@ -1,0 +1,41 @@
+<head>
+	<title>MIPS Converter</title>
+</head>
+<body>
+	<div class="jumbotron">
+		<div class="container">
+			<h1>MIPS Converter</h1>
+			<p>A simple converter from MIPS Assembly code to 16-bit instructions.</p>
+			<p>Find the <a href="http://github.com/hgoldstein95/MIPS-Web">project source</a> on GitHub along with an <a href="http://github.com/hgoldstein95/MIPS-Converter">independent Ruby script</a>.</p>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{{> main }}
+	</div>
+</body>
+
+<template name="main">
+	<form>
+		<label>Input Commands Here</label>
+		<textarea class="form-control" name="assembly" rows="20" placeholder="SUB R1, R2, R3
+LB R2, -7(R0)
+..."></textarea>
+		<br>
+		<input class="form-control" type="submit">
+	</form>
+
+	<br>
+	<br>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Output
+		</div>
+		<div class="panel-body">
+			{{#each result}}
+				{{this}}
+				<br>
+			{{/each}}
+		</div>
+	</div>	
+</template>
