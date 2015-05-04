@@ -2,24 +2,24 @@ var typeR = ['ADD', 'SUB', 'SRA', 'SRL', 'SLL', 'AND', 'OR', 'HALT']
 var typeI = ['NOP', 'LB', 'SB', 'ADDI', 'ANDI', 'ORI', 
 			'BEQ', 'BNE', 'BGEZ', 'BLTZ']
 
-function regToCode(reg) {
-	return decbin(parseInt(reg.replace(/R/, '')), 3)
-}
-
-function memToCode(input) {
-	var parts = input.split('(')
-	parts[1] = parts[1].replace(/\)/, '')
-	return parts
-}
-
-function decbin(dec,length){
-  var out = "";
-  while(length--)
-    out += (dec >> length ) & 1;    
-  return out;  
-}
-
 Session.setDefault('result', []);
+
+Template.main.regToCode = function(reg) {
+	return Template.main.decbin(parseInt(reg.replace(/R/, '')), 3);
+};
+
+Template.main.memToCode = function(input) {
+	var parts = input.split('(');
+	parts[1] = parts[1].replace(/\)/, '');
+	return parts;
+};
+
+Template.main.decbin = function(dec,length){
+	var out = "";
+	while(length--)
+		out += (dec >> length ) & 1;    
+	return out;  
+};
 
 Template.main.helpers({
 	'result': function() {
@@ -37,7 +37,7 @@ Template.main.events({
 		var commands = [];
 		for (var i = lines.length - 1; i >= 0; i--) {
 			if(lines[i] != '') 
-				commands[i] = lines[i].replace(/\,/g, '').split(' ');
+				commands[i] = lines[i].replace(/\,/g, '').split(/\s+/);
 		};
 
 		var result = [];
@@ -52,42 +52,42 @@ Template.main.events({
 				var funct = '000';
 				switch(cmd[0]) {
 					case 'ADD':
-						rd = regToCode(cmd[1]);
-						rs = regToCode(cmd[2]);
-						rt = regToCode(cmd[3]);
+						rd = Template.main.regToCode(cmd[1]);
+						rs = Template.main.regToCode(cmd[2]);
+						rt = Template.main.regToCode(cmd[3]);
 						funct = '000';
 						break;
 					case 'SUB':
-						rd = regToCode(cmd[1]);
-						rs = regToCode(cmd[2]);
-						rt = regToCode(cmd[3]);
+						rd = Template.main.regToCode(cmd[1]);
+						rs = Template.main.regToCode(cmd[2]);
+						rt = Template.main.regToCode(cmd[3]);
 						funct = '001';
 						break;
 					case 'SRA':
-						rd = regToCode(cmd[1]);
-						rs = regToCode(cmd[2]);
+						rd = Template.main.regToCode(cmd[1]);
+						rs = Template.main.regToCode(cmd[2]);
 						funct = '010';
 						break;
 					case 'SRL':
-						rd = regToCode(cmd[1]);
-						rs = regToCode(cmd[2]);
+						rd = Template.main.regToCode(cmd[1]);
+						rs = Template.main.regToCode(cmd[2]);
 						funct = '011';
 						break;
 					case 'SLL':
-						rd = regToCode(cmd[1]);
-						rs = regToCode(cmd[2]);
+						rd = Template.main.regToCode(cmd[1]);
+						rs = Template.main.regToCode(cmd[2]);
 						funct = '100';
 						break;
 					case 'AND':
-						rd = regToCode(cmd[1]);
-						rs = regToCode(cmd[2]);
-						rt = regToCode(cmd[3]);
+						rd = Template.main.regToCode(cmd[1]);
+						rs = Template.main.regToCode(cmd[2]);
+						rt = Template.main.regToCode(cmd[3]);
 						funct = '101';
 						break;
 					case 'OR':
-						rd = regToCode(cmd[1]);
-						rs = regToCode(cmd[2]);
-						rt = regToCode(cmd[3]);
+						rd = Template.main.regToCode(cmd[1]);
+						rs = Template.main.regToCode(cmd[2]);
+						rt = Template.main.regToCode(cmd[3]);
 						funct = '110';
 						break;
 					case 'HALT':
@@ -116,60 +116,60 @@ Template.main.events({
 						imm = '000000';
 						break;
 					case 'LB':
-						var data = memToCode(cmd[2]);
+						var data = Template.main.memToCode(cmd[2]);
 						op = '0010';
-						rs = regToCode(data[1]);
-						rt = regToCode(cmd[1]);
-						imm = decbin(parseInt(data[0]), 6);
+						rs = Template.main.regToCode(data[1]);
+						rt = Template.main.regToCode(cmd[1]);
+						imm = Template.main.decbin(parseInt(data[0]), 6);
 						break;
 					case 'SB':
-						var data = memToCode(cmd[2]);
+						var data = Template.main.memToCode(cmd[2]);
 						op = '0100';
-						rs = regToCode(data[1]);
-						rt = regToCode(cmd[1]);
-						imm = decbin(parseInt(data[0]), 6);
+						rs = Template.main.regToCode(data[1]);
+						rt = Template.main.regToCode(cmd[1]);
+						imm = Template.main.decbin(parseInt(data[0]), 6);
 						break;
 					case 'ADDI':
 						op = '0101';
-						rs = regToCode(cmd[2]);
-						rt = regToCode(cmd[1]);
-						imm = decbin(parseInt(cmd[3]), 6);
+						rs = Template.main.regToCode(cmd[2]);
+						rt = Template.main.regToCode(cmd[1]);
+						imm = Template.main.decbin(parseInt(cmd[3]), 6);
 						break;
 					case 'ANDI':
 						op = '0110';
-						rs = regToCode(cmd[2]);
-						rt = regToCode(cmd[1]);
-						imm = decbin(parseInt(cmd[3]), 6);
+						rs = Template.main.regToCode(cmd[2]);
+						rt = Template.main.regToCode(cmd[1]);
+						imm = Template.main.decbin(parseInt(cmd[3]), 6);
 						break;
 					case 'ORI':
 						op = '0111';
-						rs = regToCode(cmd[2]);
-						rt = regToCode(cmd[1]);
-						imm = decbin(parseInt(cmd[3]), 6);
+						rs = Template.main.regToCode(cmd[2]);
+						rt = Template.main.regToCode(cmd[1]);
+						imm = Template.main.decbin(parseInt(cmd[3]), 6);
 						break;
 					case 'BEQ':
 						op = '1000';
-						rt = regToCode(cmd[2]);
-						rs = regToCode(cmd[1]);
-						imm = decbin(parseInt(cmd[3]), 6);
+						rt = Template.main.regToCode(cmd[2]);
+						rs = Template.main.regToCode(cmd[1]);
+						imm = Template.main.decbin(parseInt(cmd[3]), 6);
 						break;
 					case 'BNE':
 						op = '1001';
-						rt = regToCode(cmd[2]);
-						rs = regToCode(cmd[1]);
-						imm = decbin(parseInt(cmd[3]), 6);
+						rt = Template.main.regToCode(cmd[2]);
+						rs = Template.main.regToCode(cmd[1]);
+						imm = Template.main.decbin(parseInt(cmd[3]), 6);
 						break;
 					case 'BGEZ':
 						op = '1010';
-						rs = regToCode(cmd[1]);
+						rs = Template.main.regToCode(cmd[1]);
 						rt = '000';
-						imm = decbin(parseInt(cmd[2]), 6);
+						imm = Template.main.decbin(parseInt(cmd[2]), 6);
 						break;
 					case 'BLTZ':
 						op = '1011';
-						rs = regToCode(cmd[1]);
+						rs = Template.main.regToCode(cmd[1]);
 						rt = '000';
-						imm = decbin(parseInt(cmd[2]), 6);
+						imm = Template.main.decbin(parseInt(cmd[2]), 6);
 						break;
 					default:
 						break;
